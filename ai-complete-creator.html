@@ -1301,28 +1301,39 @@ Capture precious life moments, unite hearts, and paint tomorrow's hope.
             };
 
             try {
-                const promptText = `You are a professional music video director and AI video prompt specialist.
+                const promptText = `Create a concise text-to-video prompt for a music video.
 
-Create a detailed text-to-video prompt for a music video based on this song theme:
-"${theme}"
+Theme: "${theme}"
+Style: ${styleDescriptions[videoStyle]}
 
-Video Style: ${styleDescriptions[videoStyle]}
-Language: ${currentLanguage === 'ja' ? 'Japanese' : 'English'}
+Requirements:
+- 80-120 words maximum
+- Include: visual concept, key scenes (2-3), color palette, camera movement
+- Vivid and specific
+- Directly usable with AI video tools (Runway, Pika Labs, etc.)
 
-Please create a detailed video prompt that includes:
-1. Visual concept and overall atmosphere
-2. Key scenes and transitions (at least 3-4 scenes)
-3. Color palette and lighting
-4. Camera movements and angles
-5. Visual effects and mood
-
-Format the output as a single, cohesive text-to-video prompt (200-300 words) that can be directly used with AI video generation tools like Runway, Pika Labs, or similar platforms.
-
-Make it vivid, specific, and cinematically compelling. Focus on visual storytelling that matches the song's emotional tone.`;
+Output only the prompt text. No explanations.`;
 
                 console.log('Sending API request for video prompt...');
-                const videoPrompt = await callAI(promptText);
+                let videoPrompt = await callAI(promptText);
+
+                // 文字数制限（500文字まで）
+                const maxLength = 500;
+                if (videoPrompt.length > maxLength) {
+                    // 最後の完全な文で終わるように切り詰め
+                    videoPrompt = videoPrompt.substring(0, maxLength);
+                    const lastPeriod = Math.max(
+                        videoPrompt.lastIndexOf('.'),
+                        videoPrompt.lastIndexOf('。'),
+                        videoPrompt.lastIndexOf('!')
+                    );
+                    if (lastPeriod > 0) {
+                        videoPrompt = videoPrompt.substring(0, lastPeriod + 1);
+                    }
+                }
+
                 console.log('Received video prompt:', videoPrompt ? videoPrompt.substring(0, 100) + '...' : 'EMPTY');
+                console.log('Video prompt length:', videoPrompt.length, 'characters');
 
                 // 表示
                 const displayDiv = document.getElementById('videoPromptDisplay');
