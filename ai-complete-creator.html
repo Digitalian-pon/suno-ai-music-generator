@@ -838,64 +838,42 @@
                 const randomEmotion = emotionalDepth[Math.floor(Math.random() * emotionalDepth.length)];
 
                 const prompt = currentLanguage === 'ja' ?
-                    `あなたは人の心に深く響く歌詞のテーマを創造する天才作詞家です。${categoryText ? categoryText + 'の分野で' : ''}聴く人が感動し、共感できる楽曲テーマを考えてください。
+                    `あなたは世界中で愛される楽曲を生み出す作詞家です。${categoryText ? categoryText + 'をテーマに、' : ''}多くの人の心に響く楽曲テーマを考えてください。
 
-💝 心に響くテーマ創造:
-- インスピレーション源：「${randomExperience}」の${randomEmotion}想い
-- 4-6文字で人の心を動かす日本語テーマ
-- ひらがな・カタカナ・漢字を美しく組み合わせ
-- 読んだ瞬間に心が温かくなる言葉
-- 聞いた人が「わかる！」と共感できる内容
-- 年齢や性別を超えて多くの人に愛されるテーマ
-- 人生の大切な瞬間を思い出させる普遍性
+🎯 テーマの方向性:
+- 「${randomExperience}」から感じる${randomEmotion}感情を表現
+- 人生の大切な瞬間、普遍的な感情を描く
+- 夢、希望、勇気、愛、成長、友情、感謝などの前向きな要素
+- 困難を乗り越える力、新しい一歩を踏み出す勇気
+- 大切な人への想い、未来への希望
 
-🎵 感動的なテーマの条件:
-- 愛、友情、家族、夢、希望、成長などの人間的感情
-- 青春、恋愛、別れ、再会、感謝などの人生体験
-- 故郷、季節、思い出、約束などの心の風景
-- 勇気、優しさ、絆、信頼などの美しい心
+✨ 良いテーマの例:
+- 「新しい明日へ」「輝く未来」「心の翼」「永遠の絆」
+- 「希望の光」「夢への道」「勇気の一歩」「無限の可能性」
+- 「Together Forever」「Rising Star」「Brave Heart」「New Horizons」
 
-🌟 テーマ例の方向性:
-- 「君への想い」「青春の日々」「感謝の心」「夢への道」
-- 「故郷の空」「友達の笑顔」「母の愛」「新しい明日」
-- 「桜舞う頃」「心の絆」「希望の光」「涙の意味」
+📝 出力: シンプルで力強いテーマ（4-8文字）。説明不要。
+${generatedThemes.length > 0 ? `
+前回のテーマ: ${generatedThemes.slice(-3).join('、')}
+これらとは違う新しいテーマを。` : ''}` :
+                    `You are a songwriter who creates songs loved worldwide. Create a ${categoryText ? categoryText.toLowerCase() : 'powerful and moving'} music theme that resonates with many people.
 
-❌ 避けるべき表現:
-- 理解困難な抽象的概念
-- 一般的でない専門用語
-- 前衛的すぎる表現
-${generatedThemes.length > 0 ? `- 過去作: ${generatedThemes.slice(-5).join('、')}` : ''}
+🎯 Theme Direction:
+- Express ${randomEmotion} emotions from "${randomExperience}"
+- Capture important life moments and universal feelings
+- Include positive elements: dreams, hope, courage, love, growth, friendship, gratitude
+- Show strength to overcome difficulties, courage to take new steps
+- Express feelings for loved ones, hope for the future
 
-💫 指示: 人の心に響く感動的なテーマ1つ。説明不要。` :
-                    `You are a gifted songwriter who creates themes that touch people's hearts deeply. Create a ${categoryText ? categoryText.toLowerCase() + ' music' : 'emotionally resonant music'} theme that moves listeners and helps them feel understood.
+✨ Good Theme Examples:
+- "Toward Tomorrow" "Shining Future" "Wings of Heart" "Eternal Bond"
+- "Light of Hope" "Road to Dreams" "Step of Courage" "Infinite Possibilities"
+- "Rise and Shine" "Brave New World" "Unbreakable Spirit" "Believe in Yourself"
 
-💝 Heart-Touching Theme Creation:
-- Inspiration source: "${randomExperience}" with ${randomEmotion} feelings
-- 2-5 words that speak to the human soul
-- Beautiful, simple language that everyone can understand
-- Words that warm the heart instantly when heard
-- Content that makes listeners think "I feel that too!"
-- Universal themes that resonate across all ages and backgrounds
-- Something that reminds us of life's precious moments
-
-🎵 Moving Theme Qualities:
-- Love, friendship, family, dreams, hope, growth and human emotions
-- Youth, romance, separation, reunion, gratitude and life experiences
-- Home, seasons, memories, promises and landscapes of the heart
-- Courage, kindness, bonds, trust and beautiful hearts
-
-🌟 Theme Direction Examples:
-- "Feelings for You" "Days of Youth" "Grateful Heart" "Road to Dreams"
-- "Hometown Sky" "Friends' Smiles" "Mother's Love" "New Tomorrow"
-- "When Cherry Blossoms Dance" "Heart's Bond" "Light of Hope" "Meaning of Tears"
-
-❌ Expressions to Avoid:
-- Difficult abstract concepts
-- Uncommon technical terms
-- Overly avant-garde expressions
-${generatedThemes.length > 0 ? `- Previous works: ${generatedThemes.slice(-5).join(', ')}` : ''}
-
-💫 Instruction: One heart-touching, moving theme. No explanation needed.`;
+📝 Output: Simple and powerful theme (2-5 words). No explanation.
+${generatedThemes.length > 0 ? `
+Previous themes: ${generatedThemes.slice(-3).join(', ')}
+Create something different from these.` : ''}`;
                 
                 let theme = await callAI(prompt);
                 theme = theme.trim().replace(/[\n\r]/g, '').replace(/^[「『"']|[」』"']$/g, '');
@@ -970,161 +948,101 @@ ${generatedThemes.length > 0 ? `- Previous works: ${generatedThemes.slice(-5).jo
                 ];
                 const randomCombo = wordCombos[Math.floor(Math.random() * wordCombos.length)];
 
-                // タイトル生成（完全AI創造版）
-                const titleJa = await callAI(`"${currentTheme}"から、${randomStyle}楽曲タイトルを創造してください。
+                // タイトル生成
+                const titleJa = await callAI(`テーマ「${currentTheme}」にぴったりの楽曲タイトルを考えてください。
 
-🎵 日本語タイトルの美学:
-あなたは日本語の美しさを知り尽くした天才的な作詞家です。
-テーマ「${currentTheme}」から独自の解釈で、前例のない革新的なタイトルを生み出してください。
+🎵 タイトルの条件:
+- ${randomStyle}雰囲気を持つ
+- 3-8文字の日本語
+- 聞いた瞬間に心に響く
+- 覚えやすく、口ずさみやすい
+- ポジティブで希望を感じる
 
-💫 今回のスタイル指定:
-- ${randomStyle}雰囲気
-- ${randomCombo}の文字構成
-- 3-6文字の美しい日本語
-- 口に出して美しい響き（音韻の美しさ）
-- 一瞬で心を掴む詩的なインパクト
-- 深い意味を秘めた哲学的な奥行き
+✨ 良いタイトルの例:
+「明日への翼」「輝く星」「心の羅針盤」「Never Give Up」
+「希望の道」「新しい空」「Together We Shine」「勇気の証」
 
-❌ 絶対に避けて:
-- 漢字ばかりのタイトル（中国語のような印象）
-- 「〜の」「〜へ」などの助詞を含むもの
-- 「愛・恋・夢・希望・涙・心・君・僕」などの安易な語
-- 既存のJ-POPアーティストが使いそうなもの
-- よくある組み合わせ（「さくら」「ひかり」「そら」「ゆめ」など）
+🎯 出力: 魅力的なタイトル1つ。説明不要。`);
 
-🌟 創造性の方向性:
-- 意外性のある言葉の組み合わせ
-- 抽象的だが美しい造語
-- 感覚的で新鮮な表現
-- 聞いたことのない独創的な響き
+                const titleEn = await callAI(`Create an inspiring song title for the theme "${currentTheme}".
 
-🎯 出力: 革新的で唯一無二のタイトル1つのみ。説明不要。シード値: ${uniqueSeed}`);
+🎵 Title Requirements:
+- ${randomStyle} atmosphere
+- 2-5 words in English
+- Instantly touching and memorable
+- Easy to remember and sing along
+- Positive and hopeful feeling
+- Universal appeal
 
-                const enStyleVariations = [
-                    'poetic and abstract', 'urban and modern', 'nature-inspired',
-                    'emotional and melancholic', 'mysterious and ethereal', 'bold and uplifting',
-                    'nostalgic and warm', 'experimental and avant-garde', 'mellow and contemplative',
-                    'energetic and dynamic', 'introspective and solitary', 'hopeful and luminous'
-                ];
-                const randomEnStyle = enStyleVariations[Math.floor(Math.random() * enStyleVariations.length)];
+✨ Good Title Examples:
+"Wings of Tomorrow" "Shining Star" "Compass of Heart" "Never Give Up"
+"Road of Hope" "Brand New Sky" "Together We Shine" "Proof of Courage"
+"Believe in Tomorrow" "Reach for the Stars" "Unbreakable Dreams" "Rise Above"
 
-                const wordStructures = [
-                    'adjective + noun', 'verb + noun', 'noun + preposition + noun',
-                    'adjective + adjective + noun', 'gerund + abstract noun',
-                    'single compound word', 'two contrasting words', 'verb + adverb'
-                ];
-                const randomStructure = wordStructures[Math.floor(Math.random() * wordStructures.length)];
-
-                const titleEn = await callAI(`Create an English song title for "${currentTheme}" with a ${randomEnStyle} vibe.
-
-🎤 Master Songwriter Mindset:
-You are a legendary English-speaking songwriter who understands the power of words.
-From the theme "${currentTheme}", create an unprecedented, revolutionary title that has never been heard before.
-
-✨ Today's Style Specification:
-- ${randomEnStyle} atmosphere
-- ${randomStructure} word structure
-- 2-4 words maximum
-- Beautiful rhythm when spoken aloud
-- Instant emotional impact
-- Poetic depth that reveals new meanings over time
-- Completely unique - nothing like it exists
-
-❌ Absolutely Forbidden:
-- "Love, Heart, Dream, Forever, Tonight, Life, Soul, Hope, Time, Day, Night"
-- Any word used in Billboard Top 40 hits
-- Clichéd phrases or predictable combinations
-- Anything Taylor Swift, Drake, Ariana Grande, Ed Sheeran would use
-- Common combinations ("Lost", "Broken", "Falling", "Fading", etc.)
-
-🌟 Innovation Direction:
-- Unexpected word combinations
-- Abstract yet beautiful neologisms
-- Sensory and fresh expressions
-- Never-heard-before unique sound
-
-🎯 Output: Revolutionary, one-of-a-kind title only. No explanation. Seed: ${uniqueSeed}`);
+🎯 Output: One inspiring title. No explanation.`);
                 
-                // 日本語歌詞生成 - 完全AI創造版
-                const lyricsJP = await callAI(`"${currentTheme}"をテーマに、革命的な日本語歌詞を創造してください。
+                // 日本語歌詞生成
+                const lyricsJP = await callAI(`テーマ「${currentTheme}」で、世界中の人々に感動と勇気を与える日本語歌詞を書いてください。
 
-🎤 天才作詞家になってください:
-あなたは言葉の魔術師です。現代の若者の心を掴み、同時に深い感動を与える歌詞を創造してください。
-どんな音楽ジャンルにするか、どんな感情を込めるか、すべてあなたが自由に決めてください。
+🎵 歌詞の目標:
+- 聞く人に希望と勇気を与える
+- 困難に立ち向かう力を感じさせる
+- 夢を追いかける大切さを伝える
+- 人々の心を一つにする
+- 明日への希望を描く
 
-🎵 自由な創造プロセス:
-1. まず、このテーマから感じる独特な世界観を想像してください
-2. どんな音楽ジャンルが最適か、直感で決めてください
-3. どんな感情を表現したいか、心の奥から感じてください
-4. 普通の歌詞では絶対に使わない、革新的な表現を探してください
+✨ 歌詞の構成（3分程度の楽曲）:
+[Intro] - 短い導入
+[Verse 1] - ストーリーの始まり
+[Pre-Chorus] - 感情の高まり
+[Chorus] - 力強く印象的なサビ
+[Verse 2] - ストーリーの展開
+[Pre-Chorus] - 再び感情の高まり
+[Chorus] - サビの繰り返し
+[Bridge] - 転調や新しい視点
+[Final Chorus] - 最も力強いサビ
+[Outro] - 希望を持って終わる
 
-🌟 革命的歌詞の条件:
-- 3分程度の楽曲構成（自由に構成を決めてください）
-- 一度聞いたら中毒になる言葉選び
-- 深い意味と美しい響きの両立
-- TikTokで爆発的に拡散される衝撃
-- 既存の日本の楽曲とは完全に違う独創性
+🌟 良い歌詞の要素:
+- 簡単で分かりやすい言葉
+- 心に響くメッセージ
+- 前向きで希望に満ちた内容
+- 覚えやすいサビ（リフレイン）
+- 自然な日本語の流れ
 
-❌ 避けるべき表現:
-- 「君・僕・愛してる・がんばって」などの陳腐語
-- 説教じみた内容や道徳的すぎる歌詞
-- アニメソング・ボカロ・J-POPの典型的表現
-- 無理に韻を踏んだ不自然な歌詞
+📝 出力: 構成タグ付きの歌詞のみ。説明不要。`);
 
-⚠️ 重要な出力指示:
-- 歌詞のみを出力してください
-- 説明文、解説、前置き、後書きは一切不要
-- 「この歌詞は...」「テーマについて...」などの説明は絶対に書かない
-- [Intro] [Verse 1] などの構成タグと歌詞だけを出力
+                // 英語歌詞生成
+                const lyricsEN = await callAI(`Write English lyrics for the theme "${currentTheme}" that inspire and encourage people around the world.
 
-💫 出力: 純粋な歌詞のみ（構成タグ付き）`);
+🎵 Lyrics Goals:
+- Give hope and courage to listeners
+- Make people feel strength to face challenges
+- Convey the importance of chasing dreams
+- Unite people's hearts
+- Paint a picture of hope for tomorrow
 
-                // 英語歌詞生成 - 完全AI創造版
-                const lyricsEN = await callAI(`Create revolutionary English lyrics for "${currentTheme}".
+✨ Song Structure (3-minute song):
+[Intro] - Brief opening
+[Verse 1] - Beginning of the story
+[Pre-Chorus] - Building emotion
+[Chorus] - Powerful and memorable hook
+[Verse 2] - Story development
+[Pre-Chorus] - Building emotion again
+[Chorus] - Repeat the hook
+[Bridge] - New perspective or key change
+[Final Chorus] - Most powerful version
+[Outro] - End with hope
 
-🎤 Become a Visionary Lyricist:
-You are a master of the English language and understand what makes lyrics transcendent.
-Feel free to choose any genre, any emotion, any style that feels right for this theme.
-Create something that has never existed before.
+🌟 Good Lyrics Elements:
+- Simple and clear language
+- Touching message
+- Positive and hopeful content
+- Memorable chorus (easy to sing along)
+- Natural flow of words
+- Universal themes everyone can relate to
 
-🌟 Creative Freedom Process:
-1. Feel the unique atmosphere and world this theme evokes
-2. Choose the musical genre that serves the theme best
-3. Decide what emotions you want to convey from your soul
-4. Find revolutionary expressions that no songwriter has ever used
-
-✨ Revolutionary Lyrics Criteria:
-- 3-minute song structure (design it freely)
-- Words that become addictive after one listen
-- Perfect balance of deep meaning and beautiful sound
-- Instant viral potential that stops people scrolling
-- Complete originality unlike any existing English song
-
-❌ Strictly Avoid:
-- "Love, heart, forever, tonight, dream, soul, life"
-- Preachy, cheesy, or overly moral content
-- Anything that sounds like Top 40, Taylor Swift, or Drake
-- Forced rhymes that sacrifice natural flow
-
-⚠️ Critical Output Instructions:
-- Output ONLY lyrics with structure tags
-- NO explanations, descriptions, or commentary
-- NO "This song is about..." or "The lyrics explore..."
-- NO introductory or concluding text
-- ONLY [Intro] [Verse 1] etc. tags with pure lyrics
-- Add line breaks after each structure tag
-- Add line breaks after each line of lyrics
-
-📝 Format Example:
-[Verse 1]
-First line of lyrics
-Second line of lyrics
-
-[Chorus]
-First chorus line
-Second chorus line
-
-🚀 Output: Pure lyrics only (with structure tags and line breaks)`);
+📝 Output: Lyrics with structure tags only. No explanations.`);
 
                 // スタイル生成 - シンプル版
                 const style = await callAI(`"${currentTheme}"のSuno AI用音楽スタイルを生成してください。
