@@ -838,42 +838,40 @@
                 const randomEmotion = emotionalDepth[Math.floor(Math.random() * emotionalDepth.length)];
 
                 const prompt = currentLanguage === 'ja' ?
-                    `あなたは世界中で愛される楽曲を生み出す作詞家です。${categoryText ? categoryText + 'をテーマに、' : ''}多くの人の心に響く楽曲テーマを考えてください。
+                    `あなたは世界中で愛される楽曲を生み出す作詞家です。${categoryText ? categoryText + 'をテーマに、' : ''}多くの人の心に響く、完全にオリジナルな楽曲テーマを考えてください。
 
 🎯 テーマの方向性:
-- 「${randomExperience}」から感じる${randomEmotion}感情を表現
-- 人生の大切な瞬間、普遍的な感情を描く
-- 夢、希望、勇気、愛、成長、友情、感謝などの前向きな要素
-- 困難を乗り越える力、新しい一歩を踏み出す勇気
-- 大切な人への想い、未来への希望
+「${randomExperience}」から感じる${randomEmotion}感情を、あなた独自の言葉で表現してください。
 
-✨ 良いテーマの例:
-- 「新しい明日へ」「輝く未来」「心の翼」「永遠の絆」
-- 「希望の光」「夢への道」「勇気の一歩」「無限の可能性」
-- 「Together Forever」「Rising Star」「Brave Heart」「New Horizons」
+✨ 大切な要素:
+- 人生の普遍的な感情や大切な瞬間を描く
+- 前向きで希望に満ちた内容
+- 人々に勇気や感動を与える
+- まだ誰も使ったことのない新鮮な言葉の組み合わせ
+- 4-8文字のシンプルで力強い日本語
 
-📝 出力: シンプルで力強いテーマ（4-8文字）。説明不要。
+⚠️ 重要: 既存の楽曲タイトルや一般的なフレーズは避け、あなた自身の感性で新しい言葉を生み出してください。
+
+📝 出力: オリジナルのテーマ1つ。説明不要。
 ${generatedThemes.length > 0 ? `
-前回のテーマ: ${generatedThemes.slice(-3).join('、')}
-これらとは違う新しいテーマを。` : ''}` :
-                    `You are a songwriter who creates songs loved worldwide. Create a ${categoryText ? categoryText.toLowerCase() : 'powerful and moving'} music theme that resonates with many people.
+避けるべき過去作: ${generatedThemes.slice(-5).join('、')}` : ''}` :
+                    `You are a songwriter who creates songs loved worldwide. Create a completely original ${categoryText ? categoryText.toLowerCase() : 'powerful and moving'} music theme that resonates with many people.
 
 🎯 Theme Direction:
-- Express ${randomEmotion} emotions from "${randomExperience}"
-- Capture important life moments and universal feelings
-- Include positive elements: dreams, hope, courage, love, growth, friendship, gratitude
-- Show strength to overcome difficulties, courage to take new steps
-- Express feelings for loved ones, hope for the future
+Express ${randomEmotion} emotions from "${randomExperience}" using your own unique words.
 
-✨ Good Theme Examples:
-- "Toward Tomorrow" "Shining Future" "Wings of Heart" "Eternal Bond"
-- "Light of Hope" "Road to Dreams" "Step of Courage" "Infinite Possibilities"
-- "Rise and Shine" "Brave New World" "Unbreakable Spirit" "Believe in Yourself"
+✨ Essential Elements:
+- Capture universal human emotions and precious life moments
+- Positive and hopeful content
+- Give courage and inspiration to people
+- Fresh word combinations never used before
+- 2-5 simple yet powerful words in English
 
-📝 Output: Simple and powerful theme (2-5 words). No explanation.
+⚠️ Important: Avoid existing song titles and common phrases. Create something truly new from your own sensitivity.
+
+📝 Output: One original theme. No explanation.
 ${generatedThemes.length > 0 ? `
-Previous themes: ${generatedThemes.slice(-3).join(', ')}
-Create something different from these.` : ''}`;
+Avoid these past themes: ${generatedThemes.slice(-5).join(', ')}` : ''}`;
                 
                 let theme = await callAI(prompt);
                 theme = theme.trim().replace(/[\n\r]/g, '').replace(/^[「『"']|[」』"']$/g, '');
@@ -949,100 +947,95 @@ Create something different from these.` : ''}`;
                 const randomCombo = wordCombos[Math.floor(Math.random() * wordCombos.length)];
 
                 // タイトル生成
-                const titleJa = await callAI(`テーマ「${currentTheme}」にぴったりの楽曲タイトルを考えてください。
+                const titleJa = await callAI(`テーマ「${currentTheme}」から、まだ誰も使ったことのない完全にオリジナルな楽曲タイトルを創造してください。
 
-🎵 タイトルの条件:
-- ${randomStyle}雰囲気を持つ
-- 3-8文字の日本語
-- 聞いた瞬間に心に響く
-- 覚えやすく、口ずさみやすい
-- ポジティブで希望を感じる
+🎵 タイトルの方向性:
+- ${randomStyle}雰囲気を表現する
+- 3-8文字の美しい日本語
+- テーマの核心を捉えた独創的な言葉
+- 聞いた瞬間に心に響き、記憶に残る
+- ポジティブで希望を感じさせる
 
-✨ 良いタイトルの例:
-「明日への翼」「輝く星」「心の羅針盤」「Never Give Up」
-「希望の道」「新しい空」「Together We Shine」「勇気の証」
+✨ 創造のヒント:
+- ひらがな、カタカナ、漢字を自由に組み合わせる
+- 既存の楽曲タイトルとは全く異なる新鮮な表現を
+- テーマの本質を、あなた独自の感性で言語化する
+- 言葉の響きと意味の両方が美しいタイトルを
 
-🎯 出力: 魅力的なタイトル1つ。説明不要。`);
+📝 出力: 完全オリジナルのタイトル1つ。説明不要。`);
 
-                const titleEn = await callAI(`Create an inspiring song title for the theme "${currentTheme}".
+                const titleEn = await callAI(`Create a completely original and unprecedented song title for the theme "${currentTheme}".
 
-🎵 Title Requirements:
-- ${randomStyle} atmosphere
-- 2-5 words in English
+🎵 Title Direction:
+- Express ${randomStyle} atmosphere
+- 2-5 powerful words in English
+- Capture the essence of the theme with unique words
 - Instantly touching and memorable
-- Easy to remember and sing along
 - Positive and hopeful feeling
-- Universal appeal
 
-✨ Good Title Examples:
-"Wings of Tomorrow" "Shining Star" "Compass of Heart" "Never Give Up"
-"Road of Hope" "Brand New Sky" "Together We Shine" "Proof of Courage"
-"Believe in Tomorrow" "Reach for the Stars" "Unbreakable Dreams" "Rise Above"
+✨ Creative Hints:
+- Avoid all common song title patterns
+- Create fresh word combinations never heard before
+- Express the theme's core through your own unique voice
+- Balance beautiful sound with meaningful message
 
-🎯 Output: One inspiring title. No explanation.`);
+📝 Output: One completely original title. No explanation.`);
                 
                 // 日本語歌詞生成
-                const lyricsJP = await callAI(`テーマ「${currentTheme}」で、世界中の人々に感動と勇気を与える日本語歌詞を書いてください。
+                const lyricsJP = await callAI(`テーマ「${currentTheme}」で、世界中の人々の心に深く響く、完全にオリジナルな日本語歌詞を創作してください。
 
-🎵 歌詞の目標:
-- 聞く人に希望と勇気を与える
-- 困難に立ち向かう力を感じさせる
-- 夢を追いかける大切さを伝える
-- 人々の心を一つにする
-- 明日への希望を描く
+🎯 歌詞の使命:
+聞く人に希望と勇気を与え、困難を乗り越える力を感じさせる歌詞を書いてください。
+人生の大切な瞬間を描き、人々の心を一つにし、明日への希望を描いてください。
 
-✨ 歌詞の構成（3分程度の楽曲）:
-[Intro] - 短い導入
-[Verse 1] - ストーリーの始まり
-[Pre-Chorus] - 感情の高まり
-[Chorus] - 力強く印象的なサビ
-[Verse 2] - ストーリーの展開
+🎵 楽曲構成（約3分）:
+[Intro] - 心を開く導入部
+[Verse 1] - 物語の始まり、状況設定
+[Pre-Chorus] - 感情が高まっていく
+[Chorus] - 最も伝えたいメッセージ（印象的で覚えやすく）
+[Verse 2] - 物語の展開、深まり
 [Pre-Chorus] - 再び感情の高まり
-[Chorus] - サビの繰り返し
-[Bridge] - 転調や新しい視点
-[Final Chorus] - 最も力強いサビ
-[Outro] - 希望を持って終わる
+[Chorus] - 核心メッセージの繰り返し
+[Bridge] - 新しい視点や転換点
+[Final Chorus] - 最高潮の感動
+[Outro] - 希望を残して締めくくる
 
-🌟 良い歌詞の要素:
-- 簡単で分かりやすい言葉
-- 心に響くメッセージ
-- 前向きで希望に満ちた内容
-- 覚えやすいサビ（リフレイン）
-- 自然な日本語の流れ
+✨ 創作のポイント:
+- 自然で美しい日本語を使う
+- 心に響く独自の表現を見つける
+- サビは覚えやすく、力強く
+- ストーリーに一貫性を持たせる
+- 既存の楽曲とは異なる、あなただけの言葉で
 
-📝 出力: 構成タグ付きの歌詞のみ。説明不要。`);
+📝 出力: 構成タグ付きの歌詞のみ。前置き・説明は一切不要。`);
 
                 // 英語歌詞生成
-                const lyricsEN = await callAI(`Write English lyrics for the theme "${currentTheme}" that inspire and encourage people around the world.
+                const lyricsEN = await callAI(`Write completely original English lyrics for the theme "${currentTheme}" that deeply touch people's hearts worldwide.
 
-🎵 Lyrics Goals:
-- Give hope and courage to listeners
-- Make people feel strength to face challenges
-- Convey the importance of chasing dreams
-- Unite people's hearts
-- Paint a picture of hope for tomorrow
+🎯 Lyrics Mission:
+Create lyrics that give hope and courage, make people feel strength to overcome challenges.
+Capture precious life moments, unite hearts, and paint tomorrow's hope.
 
-✨ Song Structure (3-minute song):
-[Intro] - Brief opening
-[Verse 1] - Beginning of the story
-[Pre-Chorus] - Building emotion
-[Chorus] - Powerful and memorable hook
-[Verse 2] - Story development
-[Pre-Chorus] - Building emotion again
-[Chorus] - Repeat the hook
-[Bridge] - New perspective or key change
-[Final Chorus] - Most powerful version
-[Outro] - End with hope
+🎵 Song Structure (approx. 3 minutes):
+[Intro] - Opening that draws listeners in
+[Verse 1] - Story beginning, setting the scene
+[Pre-Chorus] - Building emotional momentum
+[Chorus] - Core message (memorable and impactful)
+[Verse 2] - Story development, deeper meaning
+[Pre-Chorus] - Emotional build again
+[Chorus] - Repeat the core message
+[Bridge] - New perspective or turning point
+[Final Chorus] - Peak emotional moment
+[Outro] - End with lingering hope
 
-🌟 Good Lyrics Elements:
-- Simple and clear language
-- Touching message
-- Positive and hopeful content
-- Memorable chorus (easy to sing along)
-- Natural flow of words
-- Universal themes everyone can relate to
+✨ Creative Points:
+- Use natural, beautiful English
+- Find unique expressions that touch hearts
+- Make the chorus memorable and powerful
+- Keep the story coherent throughout
+- Use your own voice, different from existing songs
 
-📝 Output: Lyrics with structure tags only. No explanations.`);
+📝 Output: Lyrics with structure tags only. No preamble or explanation.`);
 
                 // スタイル生成 - シンプル版
                 const style = await callAI(`"${currentTheme}"のSuno AI用音楽スタイルを生成してください。
