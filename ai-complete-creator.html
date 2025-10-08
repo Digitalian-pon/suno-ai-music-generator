@@ -1320,44 +1320,8 @@ Format the output as a single, cohesive text-to-video prompt (200-300 words) tha
 
 Make it vivid, specific, and cinematically compelling. Focus on visual storytelling that matches the song's emotional tone.`;
 
-                console.log('Sending API request...');
-                let videoPrompt;
-
-                if (selectedAPI === 'claude') {
-                    const response = await fetch('http://localhost:3000/api/claude', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: promptText, apiKey })
-                    });
-
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('API Error:', errorText);
-                        throw new Error('API request failed: ' + response.status);
-                    }
-                    const data = await response.json();
-                    videoPrompt = data.response;
-
-                } else {
-                    const response = await fetch('http://localhost:3000/api/gemini', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            prompt: promptText,
-                            apiKey,
-                            model: geminiModel
-                        })
-                    });
-
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('API Error:', errorText);
-                        throw new Error('API request failed: ' + response.status);
-                    }
-                    const data = await response.json();
-                    videoPrompt = data.response;
-                }
-
+                console.log('Sending API request for video prompt...');
+                const videoPrompt = await callAI(promptText);
                 console.log('Received video prompt:', videoPrompt ? videoPrompt.substring(0, 100) + '...' : 'EMPTY');
 
                 // 表示
