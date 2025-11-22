@@ -294,7 +294,8 @@
             <div class="model-select" id="geminiModelSelect" style="display: none;">
                 <label>💎 Geminiモデル:</label>
                 <select id="geminiModel" onchange="updateGeminiModel()">
-                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Experimental) - 最新</option>
+                    <option value="gemini-3-pro-preview">Gemini 3 Pro (Preview) - 最新・最強 🔥</option>
+                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Experimental)</option>
                     <option value="gemini-1.5-flash">Gemini 1.5 Flash - 高速</option>
                     <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash 8B - 軽量</option>
                     <option value="gemini-1.5-pro">Gemini 1.5 Pro - 高性能</option>
@@ -482,7 +483,7 @@
         let currentData = {};
         let selectedAPI = 'claude';
         let currentLanguage = 'ja';
-        let geminiModel = 'gemini-2.0-flash-exp';
+        let geminiModel = 'gemini-3-pro-preview';
         let generatedThemes = [];
         
         // 初期化
@@ -516,16 +517,18 @@
                 themeDisplay.addEventListener('input', function() {
                     currentTheme = this.textContent.replace(/^[🔥🎲]\s*/, '');
                 });
-                
+
                 themeDisplay.addEventListener('focus', function() {
-                    if (this.textContent === 'テーマを生成してください') {
+                    const placeholder = currentLanguage === 'ja' ? 'テーマを生成してください' : 'Please generate a theme';
+                    if (this.textContent === placeholder) {
                         this.textContent = '';
                     }
                 });
-                
+
                 themeDisplay.addEventListener('blur', function() {
                     if (this.textContent === '') {
-                        this.textContent = 'テーマを生成してください';
+                        const placeholder = currentLanguage === 'ja' ? 'テーマを生成してください' : 'Please generate a theme';
+                        this.textContent = placeholder;
                     }
                 });
             }
@@ -569,7 +572,8 @@
             currentLanguage = lang;
             document.getElementById('langJa').classList.toggle('active', lang === 'ja');
             document.getElementById('langEn').classList.toggle('active', lang === 'en');
-            
+
+            // カテゴリーセレクト
             const categorySelect = document.getElementById('themeCategory');
             if (lang === 'en') {
                 categorySelect.innerHTML = `
@@ -617,6 +621,17 @@
                     <option value="pet">🐕 ペット・動物</option>
                     <option value="nature">🌿 自然・風景</option>
                 `;
+            }
+
+            // テーマ表示の更新
+            const themeDisplay = document.getElementById('themeDisplay');
+            if (!currentTheme) {
+                themeDisplay.textContent = lang === 'ja' ? 'テーマを生成してください' : 'Please generate a theme';
+            }
+
+            // 既に結果が表示されている場合は再表示
+            if (currentData.titleJa) {
+                displayResults(currentData);
             }
         }
         
@@ -1148,9 +1163,28 @@ Capture precious life moments, unite hearts, and paint tomorrow's hope.
                 throw new Error(data.error || 'API Error');
             }
             
-            if (selectedAPI === 'claude' && data.content && data.content[0]) {
+            // デバッグ: レスポンスの内容をログ出力
+            console.log('API Response:', JSON.stringify(data).substring(0, 500));
+
+            if (selectedAPI === 'claude') {
+                if (!data.content || !data.content[0]) {
+                    console.error('Claude response missing content:', data);
+                    throw new Error('Invalid Claude API response structure');
+                }
                 return fixTextEncoding(data.content[0].text);
-            } else if (selectedAPI === 'gemini' && data.candidates && data.candidates[0]) {
+            } else if (selectedAPI === 'gemini') {
+                if (!data.candidates) {
+                    console.error('Gemini response missing candidates:', data);
+                    throw new Error('Gemini API error: ' + (data.error?.message || JSON.stringify(data)));
+                }
+                if (!data.candidates[0]) {
+                    console.error('Gemini response has empty candidates array:', data);
+                    throw new Error('Gemini returned no candidates');
+                }
+                if (!data.candidates[0].content || !data.candidates[0].content.parts || !data.candidates[0].content.parts[0]) {
+                    console.error('Gemini response missing content/parts:', data.candidates[0]);
+                    throw new Error('Invalid Gemini response structure');
+                }
                 return fixTextEncoding(data.candidates[0].content.parts[0].text);
             } else {
                 throw new Error('No response from API');
@@ -1161,51 +1195,70 @@ Capture precious life moments, unite hearts, and paint tomorrow's hope.
         function displayResults(content) {
             const results = document.getElementById('results');
 
+            // 言語に応じたラベル
+            const labels = currentLanguage === 'ja' ? {
+                titleJa: '🎵 楽曲タイトル（日本語）',
+                titleEn: '🎵 楽曲タイトル（英語）',
+                lyricsJP: '🎌 日本語歌詞（3分楽曲用）',
+                lyricsEN: '🇺🇸 英語歌詞（3分楽曲用）',
+                style: '🎨 音楽スタイル',
+                artwork: '🖼️ アートワーク',
+                copyBtn: '📋 コピー'
+            } : {
+                titleJa: '🎵 Song Title (Japanese)',
+                titleEn: '🎵 Song Title (English)',
+                lyricsJP: '🎌 Lyrics (Japanese) - 3min Song',
+                lyricsEN: '🇺🇸 Lyrics (English) - 3min Song',
+                style: '🎨 Music Style',
+                artwork: '🖼️ Artwork Prompt',
+                copyBtn: '📋 Copy'
+            };
+
             results.innerHTML = `
                 <div class="result-box">
                     <div class="result-header">
-                        🎵 楽曲タイトル（日本語）
-                        <button class="copy-btn" onclick="copyTitleJa()">📋 コピー</button>
+                        ${labels.titleJa}
+                        <button class="copy-btn" onclick="copyTitleJa()">${labels.copyBtn}</button>
                     </div>
                     <div class="result-content" id="titleJaContent">${content.titleJa}</div>
                 </div>
 
                 <div class="result-box">
                     <div class="result-header">
-                        🎵 Song Title (English)
-                        <button class="copy-btn" onclick="copyTitleEn()">📋 コピー</button>
+                        ${labels.titleEn}
+                        <button class="copy-btn" onclick="copyTitleEn()">${labels.copyBtn}</button>
                     </div>
                     <div class="result-content" id="titleEnContent">${content.titleEn}</div>
                 </div>
 
                 <div class="result-box">
                     <div class="result-header">
-                        🎌 日本語歌詞（3分楽曲用）
-                        <button class="copy-btn" onclick="copyLyricsJP()">📋 コピー</button>
+                        ${labels.lyricsJP}
+                        <button class="copy-btn" onclick="copyLyricsJP()">${labels.copyBtn}</button>
                     </div>
                     <div class="result-content" id="lyricsJPContent">${content.lyricsJP}</div>
                 </div>
 
                 <div class="result-box">
                     <div class="result-header">
-                        🇺🇸 英語歌詞（3分楽曲用）
-                        <button class="copy-btn" onclick="copyLyricsEN()">📋 コピー</button>
+                        ${labels.lyricsEN}
+                        <button class="copy-btn" onclick="copyLyricsEN()">${labels.copyBtn}</button>
                     </div>
                     <div class="result-content" id="lyricsENContent">${content.lyricsEN}</div>
                 </div>
 
                 <div class="result-box">
                     <div class="result-header">
-                        🎨 音楽スタイル
-                        <button class="copy-btn" onclick="copyStyle()">📋 コピー</button>
+                        ${labels.style}
+                        <button class="copy-btn" onclick="copyStyle()">${labels.copyBtn}</button>
                     </div>
                     <div class="result-content" id="styleContent">${content.style}</div>
                 </div>
 
                 <div class="result-box">
                     <div class="result-header">
-                        🖼️ アートワーク
-                        <button class="copy-btn" onclick="copyArtwork()">📋 コピー</button>
+                        ${labels.artwork}
+                        <button class="copy-btn" onclick="copyArtwork()">${labels.copyBtn}</button>
                     </div>
                     <div class="result-content" id="artworkContent">${content.artwork}</div>
                 </div>
@@ -1220,14 +1273,18 @@ Capture precious life moments, unite hearts, and paint tomorrow's hope.
             textArea.style.left = '-999999px';
             document.body.appendChild(textArea);
             textArea.select();
-            
+
             try {
                 document.execCommand('copy');
-                alert('📋 コピーしました！');
+                const successMsg = currentLanguage === 'ja' ? '📋 コピーしました！' : '📋 Copied!';
+                alert(successMsg);
             } catch (err) {
-                alert('コピーに失敗しました。手動でコピーしてください。');
+                const errorMsg = currentLanguage === 'ja' ?
+                    'コピーに失敗しました。手動でコピーしてください。' :
+                    'Copy failed. Please copy manually.';
+                alert(errorMsg);
             }
-            
+
             document.body.removeChild(textArea);
         }
         
@@ -1387,9 +1444,13 @@ Output only the prompt text. No explanations.`;
 
             try {
                 document.execCommand('copy');
-                alert('プロンプトをコピーしました！');
+                const successMsg = currentLanguage === 'ja' ? 'プロンプトをコピーしました！' : 'Prompt copied!';
+                alert(successMsg);
             } catch (err) {
-                alert('コピーに失敗しました。手動でコピーしてください。');
+                const errorMsg = currentLanguage === 'ja' ?
+                    'コピーに失敗しました。手動でコピーしてください。' :
+                    'Copy failed. Please copy manually.';
+                alert(errorMsg);
             }
 
             document.body.removeChild(textArea);

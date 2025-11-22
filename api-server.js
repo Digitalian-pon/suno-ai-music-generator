@@ -171,8 +171,8 @@ const server = http.createServer((req, res) => {
                     throw new Error('Invalid Gemini API key format. Must start with AIzaSy');
                 }
                 
-                // モデル選択（デフォルトは2.0-flash-exp）
-                const model = requestData.model || 'gemini-2.0-flash-exp';
+                // モデル選択（デフォルトはgemini-3-pro-preview）
+                const model = requestData.model || 'gemini-3-pro-preview';
                 const temperature = requestData.temperature || 0.9;
                 
                 // Gemini APIへのリクエスト
@@ -206,16 +206,33 @@ const server = http.createServer((req, res) => {
                     geminiRes.on('end', () => {
                         console.log('Gemini API Response Status:', geminiRes.statusCode);
                         console.log('Gemini API Response Headers:', geminiRes.headers);
-                        
+                        console.log('Gemini API Response Body (first 500 chars):', responseData.substring(0, 500));
+
                         if (geminiRes.statusCode === 429) {
                             console.error('Rate limit exceeded');
                             const retryAfter = geminiRes.headers['retry-after'] || '5';
                             res.writeHead(429, { 'Content-Type': 'application/json' });
-                            res.end(JSON.stringify({ 
+                            res.end(JSON.stringify({
                                 error: 'Rate limit exceeded. Please wait and try again.',
-                                retryAfter: retryAfter 
+                                retryAfter: retryAfter
                             }));
                         } else {
+                            // デバッグ: レスポンス構造を確認
+                            try {
+                                const parsedResponse = JSON.parse(responseData);
+                                console.log('Gemini Response Structure:', JSON.stringify({
+                                    hasCandidates: !!parsedResponse.candidates,
+                                    candidatesLength: parsedResponse.candidates ? parsedResponse.candidates.length : 0,
+                                    firstCandidate: parsedResponse.candidates?.[0] ? 'exists' : 'missing',
+                                    hasContent: !!parsedResponse.candidates?.[0]?.content,
+                                    hasParts: !!parsedResponse.candidates?.[0]?.content?.parts,
+                                    partsLength: parsedResponse.candidates?.[0]?.content?.parts?.length || 0,
+                                    errorInfo: parsedResponse.error || 'none'
+                                }));
+                            } catch (e) {
+                                console.error('Failed to parse Gemini response:', e.message);
+                            }
+
                             res.writeHead(geminiRes.statusCode, { 'Content-Type': 'application/json' });
                             res.end(responseData);
                         }

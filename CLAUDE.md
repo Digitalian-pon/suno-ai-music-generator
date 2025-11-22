@@ -55,7 +55,8 @@
 - **20のテーマカテゴリー**: AI生成の多様性向上
 
 ### 2. API Server強化 (api-server.js)
-#### Gemini 2.0 Flash対応 + 4モデル動的選択
+#### Gemini 3.0 Pro対応 + 5モデル動的選択
+- **Gemini 3.0 Pro (Preview)** - 最新・最強モデル 🔥
 - **Gemini 2.0 Flash (Experimental)** - 最新モデル
 - **Gemini 1.5 Flash** - 高速生成
 - **Gemini 1.5 Flash 8B** - 軽量版
@@ -116,6 +117,15 @@ User Interface (Results Display + Edit)
 ```
 
 ## 最終更新履歴
+- **2025-11-22: 🚀 Gemini 3.0 Pro対応 + デバッグ強化**
+  - Gemini 3.0 Pro (Preview) モデル対応
+  - api-server.js デフォルトモデルをgemini-3-pro-previewに更新
+  - ai-complete-creator.html にGemini 3.0モデル選択を追加
+  - API接続エラー問題の修復（PM2サーバー起動）
+  - 詳細なデバッグログ出力機能を実装
+  - エラーハンドリングを大幅改善（より具体的なエラーメッセージ）
+  - Gemini APIレスポンス構造の検証機能を追加
+
 - **2025-09-04: 🔧 サーバー永続化とプロセス管理の実装**
   - PM2によるプロセス管理システム導入
   - Termux起動時の自動実行設定（.bashrc）
